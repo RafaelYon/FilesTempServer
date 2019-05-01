@@ -54,5 +54,26 @@ namespace TempFileServer.Controllers
 
             return Ok(updated);
         }
+
+		[HttpDelete("{id}")]
+		[ProducesResponseType(typeof(Pack), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> Delete(int id)
+		{
+			Pack removed = await Task.Run(() =>
+			{
+				Pack target = _context.Packs.Find(id);
+
+				if (target != null)
+					_context.Packs.Remove(target);
+
+				return target;
+			}); ;
+
+			if (removed == null)
+				return NotFound();
+
+			return Ok(removed);
+		}
     }
 }
