@@ -9,7 +9,7 @@ using TempFileServer.Models;
 
 namespace TempFileServer.Controllers
 {
-    [Route("api/user")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {

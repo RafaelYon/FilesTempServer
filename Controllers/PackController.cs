@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TempFileServer.Controllers
 {
-    [Route("api/pack")]
+	[Route("api/pack")]
     [ApiController]
     public class PackController : ControllerBase
     {
@@ -74,6 +73,12 @@ namespace TempFileServer.Controllers
 				return NotFound();
 
 			return Ok(removed);
+		}
+
+		[HttpPost("search-packs/{search}")]
+		public async Task<ActionResult<List<Pack>>> Search(string search)
+		{
+			return await _context.Packs.Where(p => p.name.Contains(search) && p.main_pack == 1).ToListAsync();
 		}
     }
 }
