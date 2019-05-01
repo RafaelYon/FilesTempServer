@@ -30,7 +30,7 @@ namespace TempFileServer.Controllers
 		{
 			return new LoginToken
 			{
-				access_token = $"acess_token#{DateTime.Now.ToShortDateString()}",
+				access_token = $"access_token#{DateTime.Now.ToShortDateString()}",
 				token_type = "fake",
 				expires_in = 10,
 				access_code = "1010"
@@ -59,7 +59,9 @@ namespace TempFileServer.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult Refresh()
 		{
-			if (!Request.Headers["Authorization"].Contains("acess_token#"))
+			string auth = Request.Headers["Authorization"];
+
+			if (!auth.Contains("access_token#"))
 				return Unauthorized();
 
 			return Ok(CreateFakeLoginToken());
