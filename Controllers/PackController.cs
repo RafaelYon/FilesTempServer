@@ -75,7 +75,7 @@ namespace TempFileServer.Controllers
 			return Ok(removed);
 		}
 
-		[HttpPost("search-packs/{search}")]
+		[HttpGet("search/{search}")]
 		public async Task<ActionResult<List<Pack>>> Search(string search)
 		{
 			return await _context.Packs.Where(p => p.name.Contains(search) && p.main_pack == 1).ToListAsync();
