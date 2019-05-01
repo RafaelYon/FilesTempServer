@@ -26,6 +26,17 @@ namespace TempFileServer.Controllers
             }
         }
 
+		private LoginToken CreateFakeLoginToken()
+		{
+			return new LoginToken
+			{
+				access_token = $"acess_token#{DateTime.Now.ToShortDateString()}",
+				token_type = "fake",
+				expires_in = 10,
+				access_code = "1010"
+			};
+		}
+
         [HttpPost("login")]
         [ProducesResponseType(typeof(LoginToken), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -35,18 +46,23 @@ namespace TempFileServer.Controllers
             {
                 await _context.Users.Where(u => u.email == user.email && u.password == user.password).FirstAsync();
 
-                return Ok(new LoginToken
-                {
-                    access_token = $"acess_token#{DateTime.Now.ToShortDateString()}",
-                    token_type = "fake",
-                    expires_in = 10,
-                    access_code = "1010"
-                });
+                return Ok(CreateFakeLoginToken());
             }
             catch (Exception)
             {
                 return Unauthorized();
             }
         }
+
+		[HttpPost("refresh")]
+		[ProducesResponseType(typeof(LoginToken), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		public IActionResult Refresh()
+		{
+			if (!Request.Headers["Authorization"].Contains("acess_token#"))
+				return Unauthorized();
+
+			return Ok(CreateFakeLoginToken());
+		}
     }
 }
